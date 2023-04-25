@@ -67,7 +67,7 @@ public class DiaDia {
 
 		return this.partita.isFinita();
 	}
-	
+
 
 		public static void main(String[] argc) {
 
