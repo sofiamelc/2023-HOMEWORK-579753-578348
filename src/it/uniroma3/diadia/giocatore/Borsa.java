@@ -46,6 +46,7 @@ public class Borsa {
 		}
 		return peso;
 	}
+	
 	public boolean isEmpty() {
 		return this.numeroAttrezzi == 0;
 	}
@@ -71,6 +72,8 @@ public class Borsa {
 		}
 		return a;	
 	}
+	
+	
 	
 	public String toString() {
 		StringBuilder s = new StringBuilder();

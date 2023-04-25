@@ -10,7 +10,7 @@ class StanzaTest {
 	private Stanza stanza4Direzioni;
 
 	@BeforeEach
-	public void setUp(){
+	public void setup(){
 		stanza0Direzioni = new Stanza("0 direzioni");
 		stanza4Direzioni = new Stanza("4 direzioni");
 		String[] direzioni = {"nord","sud","est","ovest"};

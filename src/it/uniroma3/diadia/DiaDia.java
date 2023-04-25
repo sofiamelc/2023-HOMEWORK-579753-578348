@@ -1,8 +1,8 @@
 package it.uniroma3.diadia;
 
+import it.uniroma3.diadia.comandi.Comando;
+import it.uniroma3.diadia.comandi.FabbricaDiComandiFisarmonica;
 
-import it.uniroma3.diadia.ambienti.Stanza;
-import it.uniroma3.diadia.attrezzi.Attrezzo;
 
 /**
  * Classe principale di diadia, un semplice gioco di ruolo ambientato al dia.
@@ -30,13 +30,13 @@ public class DiaDia {
 			"o regalarli se pensi che possano ingraziarti qualcuno.\n\n"+
 			"Per conoscere le istruzioni usa il comando 'aiuto'.";
 
-	static final private String[] elencoComandi = {"vai", "aiuto", "fine", "prendi", "posa"};
+	//static final private String[] elencoComandi = {"vai", "aiuto", "fine", "prendi", "posa"};
 
 	private Partita partita;
-	private IOConsole io;
+	private IO io;
 
-	public DiaDia(IOConsole console) {
-		this.io = console;
+	public DiaDia(IO io) {
+		this.io = io;
 		this.partita = new Partita();
 	}
 
@@ -55,7 +55,20 @@ public class DiaDia {
 	 *
 	 * @return true se l'istruzione e' eseguita e il gioco continua, false altrimenti
 	 */
-	public boolean processaIstruzione(String istruzione) { 
+	private boolean processaIstruzione(String istruzione) {
+		Comando comandoDaEseguire;
+		FabbricaDiComandiFisarmonica factory = new FabbricaDiComandiFisarmonica(this.io);
+		comandoDaEseguire = factory.costruisciComando(istruzione);
+		comandoDaEseguire.esegui(this.partita);
+		if (this.partita.vinta())
+			io.mostraMessaggio("Hai vinto!");
+		if (!this.partita.giocatoreIsVivo())
+			io.mostraMessaggio("Hai esaurito i CFU...");
+
+		return this.partita.isFinita();
+	}
+
+	/*public boolean processaIstruzione(String istruzione) { 
 		Comando DaEseguire = new Comando(istruzione);
 
 		if (DaEseguire.getNome().equals("fine")) {
@@ -86,17 +99,17 @@ public class DiaDia {
 	/**
 	 * Stampa informazioni di aiuto.
 	 */
-	private void aiuto() {
+	/*private void aiuto() {
 		for(int i=0; i< elencoComandi.length; i++) 
 			io.mostraMessaggio(elencoComandi[i]+" ");
 		io.mostraMessaggio("");
-	}
+	}*/
 
 	/**
 	 * Cerca di andare in una direzione. Se c'e' una stanza ci entra 
 	 * e ne stampa il nome, altrimenti stampa un messaggio di errore
 	 */
-	private void vai(String direzione) { //qua era private
+	/*private void vai(String direzione) { //qua era private
 		if(direzione==null) {
 			io.mostraMessaggio("Dove vuoi andare ?");
 		}
@@ -105,18 +118,18 @@ public class DiaDia {
 			prossimaStanza = this.partita.getStanzaCorrente().getStanzaAdiacente(direzione);
 			if (prossimaStanza == null)
 				io.mostraMessaggio("Direzione inesistente.\nDove vuoi andare?");
-			
+
 			else {
 				this.partita.getGiocatore().setCfu(this.partita.getGiocatore().getCfu()-1);
 				this.partita.setStanzaCorrente(prossimaStanza);
 			}
 		}
-			
+
 			io.mostraMessaggio("Ti trovi qui: " + partita.getStanzaCorrente().getDescrizione());
 			io.mostraMessaggio(partita.getGiocatore().borsa.toString());
 			io.mostraMessaggio("CFU RIMANENTI:" + partita.getGiocatore().getCfu());
-	}
-	private void prendi(String nomeAttrezzo) {
+	}*/
+	/*private void prendi(String nomeAttrezzo) {
 		if (!(this.partita.getStanzaCorrente().hasAttrezzo(nomeAttrezzo)) || 
 				(this.partita.getGiocatore().borsa.getPeso() + this.partita.getStanzaCorrente().getAttrezzo(nomeAttrezzo).getPeso()>
 				this.partita.getGiocatore().borsa.getPesoMax())){
@@ -128,9 +141,9 @@ public class DiaDia {
 			this.partita.getStanzaCorrente().removeAttrezzo(a); 
 			this.partita.getGiocatore().borsa.addAttrezzo(a);
 		}
-	}
+	}*/
 
-	private void posa(String nomeAttrezzo) {
+	/*private void posa(String nomeAttrezzo) {
 
 		if (this.partita.getGiocatore().borsa.getAttrezzo(nomeAttrezzo)==null){
 			io.mostraMessaggio("Oggetto non posabile");
@@ -145,13 +158,14 @@ public class DiaDia {
 	/**
 	 * Comando "Fine".
 	 */
-	private void fine() {
+	/*private void fine() {
 		io.mostraMessaggio("Grazie di aver giocato!");  // si desidera smettere
-	}
+	}*/
 
-	public static void main(String[] argc) {
-		IOConsole console = new IOConsole();
-		DiaDia gioco = new DiaDia(console);
-		gioco.gioca();
-	}
+		public static void main(String[] argc) {
+
+			IO io = new IOConsole();
+			DiaDia gioco = new DiaDia(io);
+			gioco.gioca();
+			}
 }
